@@ -38,7 +38,7 @@ const key_exchange = async (client_k2: bigint, tx: Transaction): Promise<any> =>
 
 	// Key Exchange
 	return await fetch(
-		`http://localhost:7071/api/initiate-kex?x=${str_x_R2}&y=${str_y_R2}`,
+		`${process.env.REACT_APP_CLOVER_BACKEND}/api/initiate-kex?x=${str_x_R2}&y=${str_y_R2}`,
 		{
 			method: "PUT",
 			headers: {
@@ -80,7 +80,7 @@ const push_partial_signature = async (keys: any, client_k2: bigint, tx: Transact
 
 	// Push the transaction and partial signature, receive the full signature pair (r, s, v)
 	return await fetch(
-		`http://localhost:7071/api/push-sig`,
+		`${process.env.REACT_APP_CLOVER_BACKEND}/api/push-sig`,
 		{
 			method: "POST",
 			headers: {
