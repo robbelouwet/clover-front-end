@@ -16,6 +16,7 @@ value, data, accessList])). Here, we compute the keccak256(...) hash.
 // The client's multiplicative share of the secret private key of the wallet
 const x2_client =
 	0xb4cd6910672fc82f923ca13b8d239f61a221bb86cce99ef6a973988e105c6e8dn;
+const app_key = `code=${process.env.REACT_APP_FUNCTIONS_APP_KEY}`
 
 export const exchange_signature = async (tx: Transaction) => {
 
@@ -25,6 +26,10 @@ export const exchange_signature = async (tx: Transaction) => {
 
 	// ----- PART 2: PARTIAL SIG -----
 	const { r, s, v } = await push_partial_signature(keys, client_k2, tx)
+
+	console.log("r: ", r)
+	console.log("r: ", s)
+	console.log("r: ", v)
 
 	// ----- PART 3: Send transaction -----
 
@@ -36,15 +41,18 @@ const key_exchange = async (client_k2: bigint, tx: Transaction): Promise<any> =>
 	const str_x_R2 = "0x" + client_R2.__x__.toString(16);
 	const str_y_R2 = "0x" + client_R2.__y__.toString(16);
 
+	const _body = tx.unsignedSerialized.toString()
+	console.log("req body init-kex: ", _body)
+
 	// Key Exchange
 	return await fetch(
-		`${process.env.REACT_APP_CLOVER_BACKEND}/api/initiate-kex?x=${str_x_R2}&y=${str_y_R2}`,
+		`${process.env.REACT_APP_CLOVER_BACKEND}/api/initiate-kex?x=${str_x_R2}&y=${str_y_R2}&${process.env.NODE_ENV === "production" ? app_key : ""}`,
 		{
 			method: "PUT",
 			headers: {
 				"Content-Type": "application/octet-stream",
 			},
-			body: tx.unsignedSerialized.toString(),
+			body: _body,
 		}
 	).then((resp) => resp.json())
 }
@@ -78,11 +86,12 @@ const push_partial_signature = async (keys: any, client_k2: bigint, tx: Transact
 	console.log("SERVER KEYS RESPONSE:", keys)
 
 
+
 	// Push the transaction and partial signature, receive the full signature pair (r, s, v)
 	return await fetch(
-		`${process.env.REACT_APP_CLOVER_BACKEND}/api/push-sig`,
+		`${process.env.REACT_APP_CLOVER_BACKEND}/api/push-sig?${process.env.NODE_ENV === "production" ? app_key : ""}`,
 		{
-			method: "POST",
+			method: "PUT",
 			headers: {
 				"Content-Type": "application/json",
 			},
