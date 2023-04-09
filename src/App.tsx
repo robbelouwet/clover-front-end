@@ -52,7 +52,8 @@ const App: React.FC = () => {
 		tx.type = 2
 		tx.value = 12345
 
-		exchange_signature(tx)
+		const client_sk = 0xb4cd6910672fc82f923ca13b8d239f61a221bb86cce99ef6a973988e105c6e8dn;
+		exchange_signature(client_sk, tx)
 	}, [])
 
 	return (<IonApp>

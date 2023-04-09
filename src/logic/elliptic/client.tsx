@@ -14,18 +14,16 @@ value, data, accessList])). Here, we compute the keccak256(...) hash.
 */
 
 // The client's multiplicative share of the secret private key of the wallet
-const x2_client =
-	0xb4cd6910672fc82f923ca13b8d239f61a221bb86cce99ef6a973988e105c6e8dn;
 const app_key = `code=${process.env.REACT_APP_FUNCTIONS_APP_KEY}`
 
-export const exchange_signature = async (tx: Transaction) => {
+export const exchange_signature = async (client_sk: bigint, tx: Transaction) => {
 
 	// ----- PART 1: Key Exchange -----
 	const client_k2 = rnd256()
 	const keys = await key_exchange(client_k2, tx)
 
 	// ----- PART 2: PARTIAL SIG -----
-	const { r, s, v } = await push_partial_signature(keys, client_k2, tx)
+	const { r, s, v } = await push_partial_signature(client_sk, keys, client_k2, tx)
 
 	console.log("r: ", r)
 	console.log("r: ", s)
@@ -57,7 +55,7 @@ const key_exchange = async (client_k2: bigint, tx: Transaction): Promise<any> =>
 	).then((resp) => resp.json())
 }
 
-const push_partial_signature = async (keys: any, client_k2: bigint, tx: Transaction): Promise<any> => {
+const push_partial_signature = async (client_sk: bigint, keys: any, client_k2: bigint, tx: Transaction): Promise<any> => {
 
 	// client_k2 inverse
 	const client_k2_inv = arith.modInv(client_k2, secp256k1.__n__);
@@ -79,7 +77,7 @@ const push_partial_signature = async (keys: any, client_k2: bigint, tx: Transact
 	const s_accent = paillier_pk.addition(
 		paillier_pk.multiply(
 			BigInt(keys["paillier_server_x"]),
-			arith.modPow(client_k2_inv * R.__x__ * x2_client, 1, secp256k1.__n__)
+			arith.modPow(client_k2_inv * R.__x__ * client_sk, 1, secp256k1.__n__)
 		), paillier_pk.encrypt(arith.modPow(client_k2_inv * BigInt(tx.unsignedHash), 1, secp256k1.__n__)
 		), paillier_pk.encrypt(secp256k1.__n__ * rho))
 
