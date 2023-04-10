@@ -47,6 +47,7 @@ const key_exchange = async (client_k2: bigint, tx: Transaction): Promise<any> =>
 		`${process.env.REACT_APP_CLOVER_BACKEND}/api/initiate-kex?x=${str_x_R2}&y=${str_y_R2}&${process.env.NODE_ENV === "production" ? app_key : ""}`,
 		{
 			method: "PUT",
+			credentials: 'include',
 			headers: {
 				"Content-Type": "application/octet-stream",
 			},
@@ -90,6 +91,7 @@ const push_partial_signature = async (client_sk: bigint, keys: any, client_k2: b
 		`${process.env.REACT_APP_CLOVER_BACKEND}/api/push-sig?${process.env.NODE_ENV === "production" ? app_key : ""}`,
 		{
 			method: "PUT",
+			credentials: 'include',
 			headers: {
 				"Content-Type": "application/json",
 			},
