@@ -13,9 +13,6 @@ keccak256(0x02 || rlp([chainId, nonce, maxPriorityFeePerGas, maxFeePerGas, gasLi
 value, data, accessList])). Here, we compute the keccak256(...) hash.
 */
 
-// The client's multiplicative share of the secret private key of the wallet
-const app_key = `code=${process.env.REACT_APP_FUNCTIONS_APP_KEY}`
-
 export const exchange_signature = async (client_sk: bigint, tx: Transaction) => {
 
 	// ----- PART 1: Key Exchange -----
@@ -44,7 +41,7 @@ const key_exchange = async (client_k2: bigint, tx: Transaction): Promise<any> =>
 
 	// Key Exchange
 	return await fetch(
-		`${process.env.REACT_APP_CLOVER_BACKEND}/api/initiate-kex?x=${str_x_R2}&y=${str_y_R2}&${process.env.NODE_ENV === "production" ? app_key : ""}`,
+		`/api/initiate-kex?x=${str_x_R2}&y=${str_y_R2}`,
 		{
 			method: "PUT",
 			credentials: 'include',
@@ -88,7 +85,7 @@ const push_partial_signature = async (client_sk: bigint, keys: any, client_k2: b
 
 	// Push the transaction and partial signature, receive the full signature pair (r, s, v)
 	return await fetch(
-		`${process.env.REACT_APP_CLOVER_BACKEND}/api/push-sig?${process.env.NODE_ENV === "production" ? app_key : ""}`,
+		`/api/push-sig`,
 		{
 			method: "PUT",
 			credentials: 'include',
