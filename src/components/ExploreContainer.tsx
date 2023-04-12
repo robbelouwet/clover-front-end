@@ -26,7 +26,7 @@ const ExploreContainer: React.FC<ContainerProps> = ({ name }) => {
     <div className="container">
       <strong>{name}</strong>
       <p>Explore <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
-      <a href='/.auth/login/google'>Google login</a>
+      <a href={`${process.env.REACT_APP_CLOVER_BACKEND}/.auth/login/google`}>Google login</a>
       <button onClick={doIt}>Send Transaction</button>
     </div>
   );
