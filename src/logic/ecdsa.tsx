@@ -107,6 +107,15 @@ export class Inf extends Point {
     }
 }
 
+export const generateCompositeKeypair = () => {
+    const compositeKey = rnd256();
+    const clientKey = rnd256();
+    const clientKeyInverse = arith.modPow(clientKey, -1, secp256k1.__q__)
+    const serverKey = arith.modPow(compositeKey * clientKeyInverse, 1, secp256k1.__q__)
+
+    return [compositeKey, clientKey, serverKey]
+}
+
 export const to_secp256k1_point = (x: bigint, y: bigint): Point => {
     return new Point(
         secp256k1.__curve__,
@@ -114,6 +123,29 @@ export const to_secp256k1_point = (x: bigint, y: bigint): Point => {
         secp256k1.__q__,
         secp256k1.__n__
     )
+}
+
+
+
+/**
+ * Generates a cryptographically secure 256-bit random number (bigint) using the browser's native crypto API
+ * 
+ * @returns the random number
+ */
+export const rnd256 = (): bigint => {
+    const bytes = new Uint8Array(32);
+
+    // load cryptographically random bytes into array
+    window.crypto.getRandomValues(bytes);
+
+    // convert byte array to hexademical representation
+    const bytesHex = bytes.reduce(
+        (o, v) => o + ("00" + v.toString(16)).slice(-2),
+        ""
+    );
+
+    // convert hexademical value to a decimal string
+    return BigInt("0x" + bytesHex);
 }
 
 export const secp256k1 = new Point(
