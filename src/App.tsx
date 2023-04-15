@@ -15,8 +15,6 @@ import { ellipse, square, triangle } from 'ionicons/icons';
 import Tab1 from './pages/Tab1';
 import Tab2 from './pages/Tab2';
 import Tab3 from './pages/Tab3';
-import { exchange_signature } from "./logic/elliptic/client"
-import { Transaction } from "ethers"
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -40,20 +38,6 @@ import './theme/variables.css';
 setupIonicReact();
 
 const App: React.FC = () => {
-
-	useEffect(() => {
-		const tx = new Transaction()
-		tx.chainId = 1
-		tx.gasLimit = 0
-		tx.maxFeePerGas = 3000000000
-		tx.maxPriorityFeePerGas = 2000000000
-		tx.nonce = 1
-		tx.to = '0xd3CdA913deB6f67967B99D67aCDFa1712C293601'
-		tx.type = 2
-		tx.value = 12345
-
-		exchange_signature(tx)
-	}, [])
 
 	return (<IonApp>
 		<IonReactRouter>
