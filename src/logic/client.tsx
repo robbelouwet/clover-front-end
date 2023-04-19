@@ -1,5 +1,5 @@
 import { secp256k1, to_secp256k1_point, Point } from "./ecdsa";
-import { Signature, Transaction, ethers } from "ethers";
+import { Signature, Transaction, ethers, InfuraProvider, Wallet } from "ethers";
 import * as arith from "bigint-mod-arith";
 import * as paillierBigint from "paillier-bigint";
 import { rnd256 } from "./ecdsa"
@@ -13,7 +13,6 @@ As per the EIP-1559 specifications, the signature is a secp256k1 signature over
 keccak256(0x02 || rlp([chainId, nonce, maxPriorityFeePerGas, maxFeePerGas, gasLimit, to,
 value, data, accessList])). Here, we compute the keccak256(...) hash.
 */
-
 export const exchange_signature = async (client_sk: bigint, tx: Transaction) => {
 
 	console.log("unsigned tx hash: ", tx.unsignedHash)
@@ -123,12 +122,23 @@ const push_partial_signature = async (client_sk: bigint, keys: any, client_k2: b
 	).then((resp) => resp.json());
 }
 
-const sendTransaction = (tx: Transaction, r: bigint, s: bigint, v: number) => {
+const sendTransaction = async (tx: Transaction, r: bigint, s: bigint, v: number) => {
+	const prov = new InfuraProvider("goerli")
+	console.log("provider:", prov)
+
 	const sig = Signature.from()
 	sig.r = r.toString(16)
 	sig.s = s.toString(16)
 	sig.v = v
 
-	const recoveredAdr = ethers.recoverAddress(tx.unsignedHash, sig)
-	console.log("recovered wallet: ", recoveredAdr)
+	tx.signature = sig
+
+	const wallet = ethers.recoverAddress(tx.unsignedHash, sig)
+	console.log("addressaeazdaz: ", wallet, " === ", tx.from)
+
+	tx.nonce = await prov.getTransactionCount(wallet)
+	tx.chainId = (await prov.getNetwork()).chainId
+
+	const result = await prov.broadcastTransaction(tx.serialized)
+	console.log("PENDING TX:", result)
 }
