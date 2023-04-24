@@ -115,7 +115,6 @@ const push_partial_signature = async (client_sk: bigint, keys: any, client_k2: b
 					x: client_R.__x__.toString(16),
 					y: client_R.__y__.toString(16)
 				},
-				// !!!!!!!!!! TODO: even though it's encrypted, malleability is still possible (?), checksum before encrypting? !!!!!!!!!!!
 				paillier_server_k: keys["paillier_server_k"],
 				s_accent: s_accent.toString(16)
 			}),
