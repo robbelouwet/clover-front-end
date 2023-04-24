@@ -1,5 +1,5 @@
 import "../theme/ExploreContainer.css"
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { CDBInput, CDBCard, CDBCardBody, CDBIcon, CDBBtn, CDBLink, CDBContainer } from 'cdbreact';
 import { generateCompositeKeypair } from '../logic/ecdsa';
 import { Row, Col } from "react-bootstrap"
@@ -28,8 +28,15 @@ const ExploreContainer: React.FC<{}> = () => {
 		return [_serverKey, _clientKey, _wallet]
 	}
 
+<<<<<<< HEAD
 	//TODO: disable 'wallet' input als 'generateWallet' aan is, 'generateWallet' moet ook wallet mee geven
 	//      maak ook input field voor identifier, integreer de google login?
+=======
+  useEffect(() => { console.log("render bc of wallet!: ", wallet) }, [wallet])
+
+  //TODO: disable 'wallet' input als 'generateWallet' aan is, 'generateWallet' moet ook wallet mee geven
+  //      maak ook input field voor identifier, integreer de google login?
+>>>>>>> 33e0da48d0dc84282839c095f959c2e7ef112b1f
 
 	const submit = () => {
 		let realServerKey = ""
@@ -77,42 +84,33 @@ const ExploreContainer: React.FC<{}> = () => {
 		<div className="container">
 			<Row>
 				<Col>
-					<CDBContainer>
-						<CDBCard style={{ width: '30rem' }}>
-							<CDBCardBody className="mx-4">
-								<div className="text-center mt-4 mb-2">
-									<p className="h4"> Register </p>
-								</div>
-								<CDBInput
-									onChange={(e: any) => setWallet(e.target.value)}
-									disabled={generateWallet}
-									value={wallet}
-									material
-									label="Wallet" />
-								<CDBInput
-									onChange={(e: any) => setServerKey(e.target.value)}
-									value={serverKey}
-									disabled={generateWallet}
-									material
-									label="Server Key" />
-								<CDBInput type="Checkbox" checked={generateWallet} onChange={(e: any) => setGenerateWallet(e.target.checked)} />
-								<p className="m-0">Generate Wallet</p>
-								<CDBBtn onClick={submit} color="dark" className="btn-block my-3 mx-0">
-									Register
-								</CDBBtn>
-							</CDBCardBody>
-						</CDBCard>
-					</CDBContainer>
+					<div className="text-center mt-4 mb-2">
+						<p className="h4"> Register </p>
+					</div>
+					<CDBInput
+						onChange={(e: any) => setWallet(e.target.value)}
+						disabled={generateWallet}
+						value={wallet}
+						material
+						label="Wallet" />
+					<CDBInput
+						onChange={(e: any) => setServerKey(e.target.value)}
+						value={serverKey}
+						disabled={generateWallet}
+						material
+						label="Server Key" />
+					<CDBInput type="Checkbox" checked={generateWallet} onChange={(e: any) => setGenerateWallet(e.target.checked)} />
+					<p className="m-0">Generate Wallet</p>
+					<CDBBtn onClick={submit} color="dark" className="btn-block my-3 mx-0">
+						Register
+					</CDBBtn>
 				</Col>
 				<Col>
-					<h4>Your wallet:</h4>
-					<CDBInput value={wallet} />
+					<p>Wallet: <div>{wallet}</div></p>
 					<br />
-					<h4>Your cold private key</h4>
-					<CDBInput value={compositeKey} />
+					<p>Your cold private key: <div>{compositeKey}</div></p>
 					<br />
-					<h4>Your clover key</h4>
-					<CDBInput value={clientKey} />
+					<p>Your clover key: <div>{clientKey}</div></p>
 				</Col>
 			</Row>
 		</div>

@@ -110,8 +110,8 @@ export class Inf extends Point {
 export const generateCompositeKeypair = () => {
     const compositeKey = rnd256();
     const clientKey = rnd256();
-    const clientKeyInverse = arith.modPow(clientKey, -1, secp256k1.__q__)
-    const serverKey = arith.modPow(compositeKey * clientKeyInverse, 1, secp256k1.__q__)
+    const clientKeyInverse = arith.modPow(clientKey, -1, secp256k1.__n__)
+    const serverKey = arith.modPow(compositeKey * clientKeyInverse, 1, secp256k1.__n__)
 
     return [compositeKey, clientKey, serverKey]
 }

@@ -12,7 +12,7 @@ import {
 
 const defaultTx = () => {
   const tx = new Transaction()
-  tx.chainId = 1
+  tx.chainId = 5
   tx.gasLimit = 0
   tx.maxFeePerGas = 3000000000
   tx.maxPriorityFeePerGas = 2000000000
