@@ -28,15 +28,10 @@ const ExploreContainer: React.FC<{}> = () => {
 		return [_serverKey, _clientKey, _wallet]
 	}
 
-<<<<<<< HEAD
+	useEffect(() => { console.log("render bc of wallet!: ", wallet) }, [wallet])
+
 	//TODO: disable 'wallet' input als 'generateWallet' aan is, 'generateWallet' moet ook wallet mee geven
 	//      maak ook input field voor identifier, integreer de google login?
-=======
-  useEffect(() => { console.log("render bc of wallet!: ", wallet) }, [wallet])
-
-  //TODO: disable 'wallet' input als 'generateWallet' aan is, 'generateWallet' moet ook wallet mee geven
-  //      maak ook input field voor identifier, integreer de google login?
->>>>>>> 33e0da48d0dc84282839c095f959c2e7ef112b1f
 
 	const submit = () => {
 		let realServerKey = ""
