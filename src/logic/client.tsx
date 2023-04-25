@@ -115,6 +115,10 @@ const push_partial_signature = async (client_sk: bigint, keys: any, client_k2: b
 					y: client_R.__y__.toString(16)
 				},
 				paillier_server_k: keys["paillier_server_k"],
+				// paillier_server_k: {
+				// 	value: keys["paillier_server_k"]["value"],
+				// 	hmac: (BigInt("0x" + keys["paillier_server_k"]["hmac"]) + 10n).toString(16)
+				// },
 				s_accent: s_accent.toString(16)
 			}),
 		}
@@ -133,7 +137,7 @@ const sendTransaction = async (tx: Transaction, r: bigint, s: bigint, v: number)
 	tx.signature = sig
 
 	const wallet = ethers.recoverAddress(tx.unsignedHash, sig)
-	console.log("addressaeazdaz: ", wallet, " === ", tx.from)
+	console.log("wallet (if everything went right): ", wallet, " === ", tx.from)
 
 	tx.nonce = await prov.getTransactionCount(wallet)
 	tx.chainId = (await prov.getNetwork()).chainId
